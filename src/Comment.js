@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import './Comments.css';
 
 class Comment extends Component {
+
+    _deleteComment (id) {
+        this.props.delete(id)
+    }
+
     render() {
         return (
             <div className="comment">
@@ -12,7 +16,7 @@ class Comment extends Component {
                     {this.props.body}
                 </p>
                 <div>
-                    <a href="#" className="comment-footer-delete">
+                    <a href="#" className="comment-footer-delete" onClick={this._deleteComment.bind(this, this.props.id)}>
                         Delete comment
                     </a>
                 </div>

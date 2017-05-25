@@ -8,21 +8,36 @@ class CommentBox extends Component {
         super();
 
         this.state = {
-            showComments: false,
+            showComments: true,
             comments: [
                 {id: 1, author: 'Bugs Bunny', body: 'What\'s up Doc'},
-                {id: 2, author: 'Pepe le Pew', body: 'Ooh look what we have here?'}
+                {id: 2, author: 'Pepe le Pew', body: 'Ooh look what we have here?'},
+                {id: 3, author: 'Donald Duck', body: 'Don\'t eat my feet'}
             ]
         };
+    }
+
+    _delete (id) {
+        this.setState({
+            comments: this.state.comments.filter(function(comment) {
+                return comment.id !== id;
+            })
+        });
     }
 
     _getComments() {
 
         return this.state.comments.map(function(comment) {
             return (
-                <Comment author={comment.author} body={comment.body} key={comment.id}/>
+                <Comment
+                    author={comment.author}
+                    body={comment.body}
+                    key={comment.id}
+                    delete={this._delete.bind(this)}
+                    id={comment.id}
+                />
             );
-        });
+        }.bind(this));
     }
 
     _getCommentsTitle(commentCount) {
@@ -43,7 +58,7 @@ class CommentBox extends Component {
 
     _addComment(author, body) {
         const comment = {
-            id: this.state.comments.length + 1,
+            id: this.state.comments.length,
             author,
             body
         };
@@ -54,8 +69,9 @@ class CommentBox extends Component {
 
     render() {
         const comments = this._getComments();
-        let commentNodes;
+        let commentNodes; //undefined
         let buttonText = "Show comments";
+
         if (this.state.showComments) {
             commentNodes = (
                 <div className="comment-list">
